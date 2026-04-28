@@ -187,9 +187,9 @@ h1 {
 
 .year-switch {
   display: inline-grid;
-  grid-template-columns: repeat(3, minmax(68px, 1fr));
+  grid-template-columns: repeat(3, minmax(61px, 1fr));
   gap: 0;
-  padding: 8px;
+  padding: 7px;
   border: 1px solid rgba(131, 247, 177, 0.24);
   border-radius: 999px;
   background: rgba(8, 241, 166, 0.92);
@@ -199,13 +199,13 @@ h1 {
 }
 
 .year-switch button {
-  min-width: 68px;
-  min-height: 50px;
+  min-width: 61px;
+  min-height: 45px;
   border: 0;
   border-radius: 999px;
   background: transparent;
   color: rgba(0, 55, 39, 0.48);
-  font-size: clamp(1.15rem, 2vw, 1.95rem);
+  font-size: clamp(1.04rem, 1.8vw, 1.76rem);
   font-weight: 900;
   letter-spacing: 0;
   cursor: pointer;
@@ -242,6 +242,7 @@ h1 {
 }
 
 .story-panel {
+  --autoplay-progress: 0%;
   position: absolute;
   z-index: 5;
   left: clamp(18px, 4vw, 54px);
@@ -253,6 +254,29 @@ h1 {
   background: var(--panel);
   box-shadow: var(--shadow);
   backdrop-filter: blur(24px);
+  overflow: hidden;
+}
+
+.story-panel::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 3px;
+  background:
+    linear-gradient(90deg, var(--green), var(--cyan)) 0 0 / var(--autoplay-progress) 100% no-repeat,
+    rgba(198, 224, 255, 0.08);
+  opacity: 0;
+  transition: opacity 180ms ease;
+}
+
+.story-panel.is-autoplaying {
+  border-color: rgba(131, 247, 177, 0.42);
+}
+
+.story-panel.is-autoplaying::after {
+  opacity: 1;
 }
 
 .panel-head {
@@ -296,7 +320,14 @@ dd {
 
 .panel-actions {
   display: flex;
+  align-items: center;
   gap: 10px;
+}
+
+.icon-actions {
+  display: flex;
+  gap: 8px;
+  margin-left: auto;
 }
 
 .button {
@@ -321,6 +352,87 @@ dd {
 .secondary {
   border-color: var(--line);
   background: rgba(255, 255, 255, 0.06);
+}
+
+.icon-button {
+  display: inline-grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.055);
+  color: var(--text);
+  cursor: pointer;
+}
+
+.icon-button:hover {
+  border-color: rgba(82, 217, 255, 0.55);
+}
+
+.autoplay-button {
+  border-color: rgba(131, 247, 177, 0.28);
+  background: rgba(131, 247, 177, 0.09);
+}
+
+.map-icon {
+  position: relative;
+  width: 17px;
+  height: 17px;
+  border: 2px solid var(--green);
+  border-radius: 50% 50% 50% 0;
+  transform: rotate(-45deg);
+}
+
+.map-icon::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--green);
+  transform: translate(-50%, -50%);
+}
+
+.pause-icon,
+.play-icon {
+  position: relative;
+  width: 13px;
+  height: 14px;
+  display: inline-block;
+}
+
+.pause-icon::before,
+.pause-icon::after {
+  content: "";
+  position: absolute;
+  top: 1px;
+  width: 4px;
+  height: 12px;
+  border-radius: 2px;
+  background: var(--green);
+}
+
+.pause-icon::before {
+  left: 1px;
+}
+
+.pause-icon::after {
+  right: 1px;
+}
+
+.play-icon::before {
+  content: "";
+  position: absolute;
+  left: 2px;
+  top: 1px;
+  width: 0;
+  height: 0;
+  border-top: 6px solid transparent;
+  border-bottom: 6px solid transparent;
+  border-left: 10px solid var(--green);
 }
 
 .dock {
@@ -427,14 +539,14 @@ a:focus-visible {
   }
 
   .year-switch {
-    grid-template-columns: repeat(3, minmax(58px, 1fr));
-    padding: 6px;
+    grid-template-columns: repeat(3, minmax(52px, 1fr));
+    padding: 5px;
   }
 
   .year-switch button {
-    min-width: 58px;
-    min-height: 42px;
-    font-size: 1.05rem;
+    min-width: 52px;
+    min-height: 38px;
+    font-size: 0.95rem;
   }
 
   .story-panel h2 {
@@ -443,6 +555,14 @@ a:focus-visible {
 
   .meta-grid {
     grid-template-columns: 1fr;
+  }
+
+  .panel-actions {
+    align-items: stretch;
+  }
+
+  .icon-actions {
+    margin-left: 0;
   }
 
   .dock {

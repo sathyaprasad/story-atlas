@@ -7,11 +7,13 @@ Story Atlas is a dark, cinematic, map-based explorer for curated and award-winni
 - App name: Story Atlas.
 - Source/product label: ArcGIS StoryMaps, preserving trademark casing.
 - First screen is the explorer itself, not a landing page.
-- Primary visual is a Three.js globe with a transparent abstract surface, subtle graticule, subtle country-boundary hints, story pins, and one active story label.
+- Primary visual is a Three.js UV sphere using `assets/world.jpg` as a dark equirectangular Earth texture, plus subtle graticule, atmosphere, story pins, and one active story label.
 - Dark theme with glass panels, neon green year selector, cyan globe accents, and restrained category colors.
 
 ## Story Data
 - Years available: 2026, 2025, 2024.
+- Story data lives in `stories.json`, grouped by year, so new stories can be added without editing `app.js`.
+- Story coordinates use decimal latitude/longitude. Regional or global stories may use representative center points rather than exact addresses.
 - Year selector lives in the top-right header area.
 - Selecting a year updates the story count, carousel, active details, visible pins, and focused globe position.
 - Open story links must point directly to `https://storymaps.arcgis.com/stories/...` or `https://storymaps.arcgis.com/briefings/...`, not Esri listing pages or StoryMaps collection pages.
@@ -19,18 +21,28 @@ Story Atlas is a dark, cinematic, map-based explorer for curated and award-winni
 ## Globe Requirements
 - Use Three.js for the main map/globe.
 - Globe should feel abstract and cinematic, inspired by 2050.earth, while staying readable.
-- Globe must not use green land patches, cyan dotted land clusters, filled land blobs, or noisy texture speckles.
-- Current globe surface should stay transparent/clean, with only subtle boundary hints and grid/atmosphere effects.
+- Globe texture should use the repo-local `assets/world.jpg` image supplied by the user.
+- Globe must not use generated green land patches, cyan dotted land clusters, filled land blobs, or noisy procedural speckles.
 - Selecting a story must rotate the globe so the active pin is centered toward the camera.
 - Only the active pin label should be visible.
 - Only the active pin should pulse; inactive pins remain steady.
 
+## Autoplay Requirements
+- Autoplay starts enabled when the app loads.
+- Every 10 seconds, autoplay advances to the next story in the selected year.
+- Advancing updates the selected card, story detail panel, active pin, active label, and centered globe focus.
+- The detail panel contains a play/pause control for autoplay.
+- The detail panel shows a subtle progress indicator for the 10-second interval.
+
 ## UI Requirements
 - Story detail panel shows category, award/year label, title, summary, place, and why-study-it note.
 - Story list is a horizontal carousel.
+- When the active story changes, the carousel should scroll the selected card into view.
 - Search/theme filtering is intentionally removed for now and may be revisited later.
 - Text should not overlap on common desktop/mobile viewports.
 - Avoid extra explanatory text inside the app UI.
+- Secondary panel actions use compact icon-only controls aligned to the right of the primary action.
+- Vercel Speed Insights should be initialized from the vanilla JavaScript entry so deployed Vercel traffic reports Core Web Vitals without adding visible UI.
 
 ## Verification Notes
 - After visual or interaction changes, verify in the in-app browser at localhost.

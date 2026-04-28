@@ -52,7 +52,15 @@
           </dl>
           <div class="panel-actions">
             <a id="active-link" class="button primary" target="_blank" rel="noreferrer">Open story</a>
-            <button id="focus-button" class="button secondary" type="button">Focus pin</button>
+            <div class="icon-actions">
+              <button id="focus-button" class="icon-button" type="button" aria-label="Show on map" title="Show on map">
+                <span class="map-icon" aria-hidden="true"></span>
+              </button>
+              <button id="autoplay-button" class="icon-button autoplay-button" type="button" aria-pressed="true" aria-label="Pause autoplay" title="Pause autoplay">
+                <span class="pause-icon" aria-hidden="true"></span>
+                <span id="autoplay-label" class="sr-only">Pause</span>
+              </button>
+            </div>
           </div>
         </aside>
 
@@ -65,7 +73,8 @@
     <script type="importmap">
       {
         "imports": {
-          "three": "https://unpkg.com/three@0.164.1/build/three.module.js"
+          "three": "https://unpkg.com/three@0.164.1/build/three.module.js",
+          "@vercel/speed-insights": "https://unpkg.com/@vercel/speed-insights@2.0.0/dist/index.mjs"
         }
       }
     </script>
