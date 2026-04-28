@@ -33,6 +33,7 @@ Story Atlas is a dark, cinematic, map-based explorer for curated and award-winni
 - Advancing updates the selected card, story detail panel, active pin, active label, and centered globe focus.
 - The detail panel contains a play/pause control for autoplay.
 - The detail panel shows a subtle progress indicator for the 10-second interval.
+- Clicking Open story pauses autoplay before the story opens in a new tab, keeping the explorer on that story.
 
 ## UI Requirements
 - Story detail panel shows category, award/year label, title, summary, place, and why-study-it note.
@@ -43,6 +44,7 @@ Story Atlas is a dark, cinematic, map-based explorer for curated and award-winni
 - Avoid extra explanatory text inside the app UI.
 - Secondary panel actions use compact icon-only controls aligned to the right of the primary action.
 - Vercel Speed Insights should be initialized from the vanilla JavaScript entry so deployed Vercel traffic reports Core Web Vitals without adding visible UI.
+- Localhost development should not inject the Vercel Speed Insights runtime request, avoiding expected local 404 noise from the Python static server.
 
 ## Verification Notes
 - After visual or interaction changes, verify in the in-app browser at localhost.

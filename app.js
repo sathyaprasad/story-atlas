@@ -1,7 +1,11 @@
 import * as THREE from "three";
 import { injectSpeedInsights } from "@vercel/speed-insights";
 
-injectSpeedInsights();
+const isLocalHost = ["localhost", "127.0.0.1", "::1"].includes(window.location.hostname);
+
+if (!isLocalHost) {
+  injectSpeedInsights();
+}
 
 let storyData;
 let stories = [];
@@ -95,23 +99,23 @@ globeGroup.add(pinGroup);
 
 function createStoryPins() {
   storyPins = stories.map((story) => {
-  const pin = createPin(story);
-  pin.userData.story = story;
-  pin.position.copy(latLonToVector(story.lat, story.lon, 1.55));
-  pin.lookAt(pin.position.clone().multiplyScalar(2));
-  pinGroup.add(pin);
-  return pin;
+    const pin = createPin(story);
+    pin.userData.story = story;
+    pin.position.copy(latLonToVector(story.lat, story.lon, 1.55));
+    pin.lookAt(pin.position.clone().multiplyScalar(2));
+    pinGroup.add(pin);
+    return pin;
   });
 }
 
 function createStoryLabels() {
   elements.labels.innerHTML = "";
   storyLabels = stories.map((story) => {
-  const label = document.createElement("div");
-  label.className = "globe-label";
-  label.innerHTML = `<strong>${story.place}</strong><span>${story.title}</span>`;
-  elements.labels.append(label);
-  return { label, story };
+    const label = document.createElement("div");
+    label.className = "globe-label";
+    label.innerHTML = `<strong>${story.place}</strong><span>${story.title}</span>`;
+    elements.labels.append(label);
+    return { label, story };
   });
 }
 
@@ -415,6 +419,7 @@ elements.yearButtons.forEach((button) => {
 });
 elements.focus.addEventListener("click", () => focusStory(activeStory));
 elements.autoplay.addEventListener("click", () => setAutoplay(!autoplayEnabled));
+elements.link.addEventListener("click", () => setAutoplay(false));
 elements.canvas.addEventListener("click", pickPin);
 elements.canvas.addEventListener("pointerdown", (event) => {
   pointerDown = true;
