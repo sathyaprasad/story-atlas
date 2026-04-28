@@ -1,4 +1,5 @@
 import * as THREE from "three";
+import { injectSpeedInsights } from "@vercel/speed-insights";
 
 const stories = [
   {
@@ -758,3 +759,6 @@ window.addEventListener("pointermove", (event) => {
 resize();
 selectYear(activeYear);
 animate();
+
+// Initialize Vercel Speed Insights
+injectSpeedInsights();
