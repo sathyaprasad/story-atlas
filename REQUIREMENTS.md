@@ -36,7 +36,7 @@ Story Atlas is a dark, cinematic, map-based explorer for curated and award-winni
 - Clicking Open story pauses autoplay before the story opens in a new tab, keeping the explorer on that story.
 
 ## UI Requirements
-- Story detail panel shows category, award/year label, title, summary, place, and why-study-it note.
+- Story detail panel shows category, award/year label, title, summary, place, and highlights.
 - Story list is a horizontal carousel.
 - When the active story changes, the carousel should scroll the selected card into view.
 - Search/theme filtering is intentionally removed for now and may be revisited later.
