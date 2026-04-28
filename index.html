@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Story Atlas</title>
+    <link rel="preconnect" href="https://unpkg.com" />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="shell">
+      <span id="render-health" class="sr-only" aria-live="polite">Checking render</span>
+      <section class="map-stage" aria-label="Interactive Atlas globe">
+        <canvas id="globe" aria-hidden="true"></canvas>
+        <div id="globe-labels" class="globe-labels" aria-hidden="true"></div>
+        <div class="scanline" aria-hidden="true"></div>
+
+        <header class="topbar">
+          <div>
+            <p class="eyebrow">ArcGIS StoryMaps</p>
+            <h1>Story Atlas</h1>
+          </div>
+          <div class="top-actions">
+            <div class="year-switch" role="tablist" aria-label="Story year">
+              <button type="button" data-year="2026" role="tab">2026</button>
+              <button type="button" data-year="2025" role="tab">2025</button>
+              <button type="button" data-year="2024" role="tab">2024</button>
+            </div>
+            <div class="status-pill">
+              <span id="story-count">0</span>
+              <span>curated stories</span>
+            </div>
+          </div>
+        </header>
+
+        <aside class="story-panel" aria-label="Story details">
+          <div class="panel-head">
+            <span id="active-category">Environment</span>
+            <span id="active-year">2026</span>
+          </div>
+          <h2 id="active-title">Loading stories...</h2>
+          <p id="active-summary"></p>
+          <dl class="meta-grid">
+            <div>
+              <dt>Place</dt>
+              <dd id="active-place"></dd>
+            </div>
+            <div>
+              <dt>Why Study It</dt>
+              <dd id="active-strength"></dd>
+            </div>
+          </dl>
+          <div class="panel-actions">
+            <a id="active-link" class="button primary" target="_blank" rel="noreferrer">Open story</a>
+            <button id="focus-button" class="button secondary" type="button">Focus pin</button>
+          </div>
+        </aside>
+
+        <nav class="dock" aria-label="Story list">
+          <ol id="story-list" class="story-list"></ol>
+        </nav>
+      </section>
+    </main>
+
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://unpkg.com/three@0.164.1/build/three.module.js"
+        }
+      }
+    </script>
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>
