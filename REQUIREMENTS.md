@@ -30,7 +30,6 @@ Story Atlas is a dark, cinematic, map-based explorer for curated and award-winni
 
 ## Data Contract
 - Story data lives in `stories.json`, grouped by year.
-- External content URLs used by story data are tracked in `DATA_SOURCES.md` for review and audit.
 - Supported years are `2026`, `2025`, and `2024`.
 - New stories should be addable through `stories.json` without editing story-rendering logic in `app.js`.
 - Each story entry must include:
@@ -55,7 +54,6 @@ Story Atlas is a dark, cinematic, map-based explorer for curated and award-winni
 - Every story has all required fields.
 - Every `lat` and `lon` value is numeric.
 - Every `url` uses one of the allowed direct StoryMaps URL prefixes.
-- `DATA_SOURCES.md` is updated whenever `stories.json` story URLs change.
 - Selecting a year updates the visible stories without changing `stories.json`.
 
 ## Theme Color Contract
