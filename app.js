@@ -10,6 +10,19 @@ if (!isLocalHost) {
 let storyData;
 let stories = [];
 
+const THEME_COLORS = {
+  Conservation: "#52d9ff",
+  "Digital Humanities": "#b8a4ff",
+  Environment: "#83f7b1",
+  "Health and Safety": "#ff7b9c",
+  "Humanitarian Response": "#ffd166",
+  Infrastructure: "#f7b955",
+  Nature: "#6ee7a8",
+  People: "#ff7b9c",
+  "Planning and Infrastructure": "#ffd166",
+  Research: "#c7a8ff",
+};
+
 const elements = {
   canvas: document.querySelector("#globe"),
   labels: document.querySelector("#globe-labels"),
@@ -184,7 +197,7 @@ function buildStars() {
 
 function createPin(story) {
   const group = new THREE.Group();
-  const color = new THREE.Color(story.color);
+  const color = new THREE.Color(story.themeColor);
   const base = new THREE.Mesh(
     new THREE.SphereGeometry(0.028, 20, 20),
     new THREE.MeshBasicMaterial({
@@ -242,6 +255,7 @@ function renderList() {
     const button = document.createElement("button");
     button.type = "button";
     button.setAttribute("aria-current", story === activeStory ? "true" : "false");
+    button.style.setProperty("--theme-color", story.themeColor);
     button.innerHTML = `
       <span class="card-title">${story.title}</span>
       <span class="card-meta"><span>${story.place}</span><span class="tag">${story.theme}</span></span>
@@ -275,7 +289,7 @@ function selectStory(story, focusGlobe = false, resetAutoplay = true) {
     pin.scale.setScalar(isActive ? 2.15 : 1);
     const [halo, base, stem] = pin.children;
     halo.material.opacity = isActive ? 0.95 : 0.22;
-    base.material.color.set(isActive ? "#ffffff" : pin.userData.story.color);
+    base.material.color.set(isActive ? "#ffffff" : pin.userData.story.themeColor);
     stem.material.opacity = isActive ? 0.78 : 0.38;
   });
   storyLabels.forEach(({ label, story: labelStory }) => {
@@ -445,7 +459,11 @@ async function loadStories() {
   }
   storyData = await response.json();
   stories = Object.entries(storyData).flatMap(([year, entries]) =>
-    entries.map((story) => ({ ...story, year })),
+    entries.map((story) => ({
+      ...story,
+      year,
+      themeColor: THEME_COLORS[story.theme] ?? story.color,
+    })),
   );
   createStoryPins();
   createStoryLabels();

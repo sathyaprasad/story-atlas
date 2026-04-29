@@ -38,6 +38,7 @@ Story Atlas is a dark, cinematic, map-based explorer for curated and award-winni
 ## UI Requirements
 - Story detail panel shows category, award/year label, title, summary, place, and highlights.
 - Story list is a horizontal carousel.
+- Story card theme text and globe pins must use the same theme-level color for a given theme.
 - When the active story changes, the carousel should scroll the selected card into view.
 - Search/theme filtering is intentionally removed for now and may be revisited later.
 - Text should not overlap on common desktop/mobile viewports.

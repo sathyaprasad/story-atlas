@@ -510,7 +510,7 @@ a:focus-visible {
 }
 
 .tag {
-  color: var(--green);
+  color: var(--theme-color, var(--green));
 }
 
 @media (max-width: 760px) {
