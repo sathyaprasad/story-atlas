@@ -590,7 +590,7 @@ a:focus-visible {
   }
 
   .story-panel.is-collapsed::after {
-    opacity: 0;
+    opacity: 1;
   }
 
   .story-panel.is-collapsed .panel-head {
@@ -616,7 +616,7 @@ a:focus-visible {
     position: absolute;
     z-index: 2;
     top: 14px;
-    left: min(220px, calc(100vw - 76px));
+    right: 14px;
     border-color: rgba(131, 247, 177, 0.42);
     background: rgba(131, 247, 177, 0.11);
   }
