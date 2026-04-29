@@ -6,6 +6,7 @@ Story Atlas is a dark, cinematic, map-based explorer for curated and award-winni
 ## Current Experience
 - App name: Story Atlas.
 - Source/product label: ArcGIS StoryMaps, preserving trademark casing.
+- App icon uses the repo-local `assets/story-atlas-logo.png` image supplied by the user; the logo image is not shown in the page header.
 - First screen is the explorer itself, not a landing page.
 - Primary visual is a Three.js UV sphere using `assets/world.jpg` as a dark equirectangular Earth texture, plus subtle graticule, atmosphere, story pins, and one active story label.
 - Dark theme with glass panels, neon green year selector, cyan globe accents, and restrained category colors.
