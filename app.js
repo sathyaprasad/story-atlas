@@ -33,11 +33,11 @@ const elements = {
   category: document.querySelector("#active-category"),
   year: document.querySelector("#active-year"),
   title: document.querySelector("#active-title"),
+  thumbnail: document.querySelector("#active-thumbnail"),
   summary: document.querySelector("#active-summary"),
   place: document.querySelector("#active-place"),
   strength: document.querySelector("#active-strength"),
   link: document.querySelector("#active-link"),
-  focus: document.querySelector("#focus-button"),
   autoplay: document.querySelector("#autoplay-button"),
   autoplayLabel: document.querySelector("#autoplay-label"),
   panelToggle: document.querySelector("#panel-toggle"),
@@ -58,6 +58,7 @@ let targetRotation = new THREE.Vector2(0.2, -0.35);
 let pointerDown = false;
 let previousPointer = new THREE.Vector2();
 let isPanelCollapsed = false;
+const thumbnailCache = new Map();
 
 elements.count.textContent = "0";
 
@@ -286,6 +287,7 @@ function selectStory(story, focusGlobe = false, resetAutoplay = true) {
   elements.place.textContent = story.place;
   elements.strength.textContent = story.strength;
   elements.link.href = story.url;
+  updateStoryThumbnail(story);
   storyPins.forEach((pin) => {
     const isActive = pin.userData.story === story;
     pin.visible = pin.userData.story.year === activeYear;
@@ -304,6 +306,53 @@ function selectStory(story, focusGlobe = false, resetAutoplay = true) {
   if (focusGlobe) {
     focusStory(story);
   }
+}
+
+function getStoryItemId(story) {
+  return story.url.match(/\/(?:stories|briefings|frames)\/([^/?#]+)/)?.[1] ?? "";
+}
+
+async function updateStoryThumbnail(story) {
+  const itemId = getStoryItemId(story);
+  elements.thumbnail.hidden = true;
+  elements.thumbnail.removeAttribute("src");
+  elements.thumbnail.dataset.storyUrl = story.url;
+
+  if (!itemId) {
+    return;
+  }
+
+  let thumbnailUrl = thumbnailCache.get(itemId);
+  if (thumbnailUrl === undefined) {
+    thumbnailUrl = "";
+    try {
+      const response = await fetch(`https://www.arcgis.com/sharing/rest/content/items/${itemId}?f=json`);
+      if (response.ok) {
+        const item = await response.json();
+        if (item.thumbnail) {
+          thumbnailUrl = item.thumbnail.startsWith("http")
+            ? item.thumbnail
+            : `https://www.arcgis.com/sharing/rest/content/items/${itemId}/info/${item.thumbnail}?w=400`;
+        }
+      }
+    } catch {
+      thumbnailUrl = "";
+    }
+    thumbnailCache.set(itemId, thumbnailUrl);
+  }
+
+  if (!thumbnailUrl || elements.thumbnail.dataset.storyUrl !== story.url) {
+    return;
+  }
+
+  elements.thumbnail.onerror = () => {
+    if (elements.thumbnail.dataset.storyUrl === story.url) {
+      elements.thumbnail.hidden = true;
+      elements.thumbnail.removeAttribute("src");
+    }
+  };
+  elements.thumbnail.src = thumbnailUrl;
+  elements.thumbnail.hidden = false;
 }
 
 function selectYear(year) {
@@ -447,7 +496,6 @@ elements.yearButtons.forEach((button) => {
   button.addEventListener("click", () => selectYear(button.dataset.year));
 });
 elements.yearSelect.addEventListener("change", () => selectYear(elements.yearSelect.value));
-elements.focus.addEventListener("click", () => focusStory(activeStory));
 elements.autoplay.addEventListener("click", () => setAutoplay(!autoplayEnabled));
 elements.panelToggle.addEventListener("click", () => setPanelCollapsed(!isPanelCollapsed));
 elements.link.addEventListener("click", () => setAutoplay(false));

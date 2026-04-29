@@ -329,12 +329,28 @@ h1 {
   transform: translateY(-2px) rotate(45deg);
 }
 
+.panel-title-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 96px;
+  align-items: start;
+  gap: 16px;
+}
+
 .story-panel h2 {
   margin: 0;
-  max-width: 14ch;
   font-size: clamp(1.6rem, 3vw, 2.6rem);
   line-height: 1;
   letter-spacing: 0;
+}
+
+.story-thumbnail {
+  width: 96px;
+  aspect-ratio: 3 / 2;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.06);
+  box-shadow: 0 16px 28px rgba(0, 0, 0, 0.26);
+  object-fit: cover;
 }
 
 .story-panel p {
@@ -416,27 +432,6 @@ dd {
 .autoplay-button {
   border-color: rgba(131, 247, 177, 0.28);
   background: rgba(131, 247, 177, 0.09);
-}
-
-.map-icon {
-  position: relative;
-  width: 17px;
-  height: 17px;
-  border: 2px solid var(--green);
-  border-radius: 50% 50% 50% 0;
-  transform: rotate(-45deg);
-}
-
-.map-icon::after {
-  content: "";
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: var(--green);
-  transform: translate(-50%, -50%);
 }
 
 .pause-icon,
@@ -661,8 +656,13 @@ a:focus-visible {
     appearance: none;
   }
 
-  .story-panel h2 {
-    max-width: 17ch;
+  .panel-title-row {
+    grid-template-columns: minmax(0, 1fr) 78px;
+    gap: 12px;
+  }
+
+  .story-thumbnail {
+    width: 78px;
   }
 
   .meta-grid {

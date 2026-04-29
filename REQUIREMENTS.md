@@ -120,6 +120,7 @@ Story Atlas is a dark, cinematic, map-based explorer for curated and award-winni
   - theme/category.
   - award/year label.
   - title.
+  - small decorative thumbnail beside the title when ArcGIS item metadata provides one.
   - summary.
   - place.
   - highlights.
@@ -128,11 +129,14 @@ Story Atlas is a dark, cinematic, map-based explorer for curated and award-winni
 - The visible action text stays compact as `Open story`.
 - The accessible name for the link is `Open story in new tab`.
 - Clicking `Open story` pauses autoplay before the story opens, keeping the explorer on that story.
-- Secondary panel actions use compact icon-only controls aligned to the right of the primary action.
+- Autoplay uses a compact icon-only control aligned to the right of the primary action.
+- Story thumbnails are derived from the active StoryMaps item id through ArcGIS item metadata and hidden when unavailable or broken.
 - On mobile-width viewports, the story detail panel can collapse to reveal more of the globe.
 
 ### Acceptance Criteria
 - Detail content updates when the active story changes.
+- If a thumbnail is available for the active story, it appears beside the title without pushing text outside the card.
+- If a thumbnail is unavailable or fails to load, the detail panel hides the thumbnail rather than showing a broken image.
 - Open story link `href` matches the active story URL.
 - Open story link has `target="_blank"` and `rel="noreferrer"`.
 - Open story link exposes the accessible name `Open story in new tab`.
@@ -184,7 +188,7 @@ Story Atlas is a dark, cinematic, map-based explorer for curated and award-winni
 - Browser accessibility tree exposes `Story Atlas` as a heading.
 - Year controls expose selected state.
 - Story detail panel exposes title, summary, place, highlights, and actions.
-- `Show on map`, `Pause autoplay`, and `Play autoplay` are named controls.
+- `Pause autoplay` and `Play autoplay` are named controls.
 - Story detail collapse/expand control is named and exposes `aria-expanded`.
 - Card selection is available through focusable buttons.
 - Keyboard focus states are visible for links, year controls, carousel cards, and icon buttons.
@@ -239,5 +243,5 @@ Story Atlas is a dark, cinematic, map-based explorer for curated and award-winni
 - Verify mobile story detail panel collapse and expand behavior.
 - Verify the accessibility tree contains expected landmarks, labels, and selected states.
 - Verify theme color contrast for card theme text.
-- Verify keyboard navigation can reach year controls, story cards, Open story, Show on map, and autoplay controls.
+- Verify keyboard navigation can reach year controls, story cards, Open story, and autoplay controls.
 - Verify no text overlap, clipping, or unreachable controls on desktop and mobile-width viewports after visual changes.

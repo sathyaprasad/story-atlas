@@ -52,7 +52,10 @@
             </button>
           </div>
           <div id="story-panel-body" class="panel-body">
-            <h2 id="active-title">Loading stories...</h2>
+            <div class="panel-title-row">
+              <h2 id="active-title">Loading stories...</h2>
+              <img id="active-thumbnail" class="story-thumbnail" alt="" aria-hidden="true" loading="lazy" hidden />
+            </div>
             <p id="active-summary"></p>
             <dl class="meta-grid">
               <div>
@@ -67,9 +70,6 @@
             <div class="panel-actions">
               <a id="active-link" class="button primary" target="_blank" rel="noreferrer" aria-label="Open story in new tab">Open story</a>
               <div class="icon-actions">
-                <button id="focus-button" class="icon-button" type="button" aria-label="Show on map" title="Show on map">
-                  <span class="map-icon" aria-hidden="true"></span>
-                </button>
                 <button id="autoplay-button" class="icon-button autoplay-button" type="button" aria-pressed="true" aria-label="Pause autoplay" title="Pause autoplay">
                   <span class="pause-icon" aria-hidden="true"></span>
                   <span id="autoplay-label" class="sr-only">Pause</span>
