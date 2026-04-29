@@ -35,33 +35,40 @@
           </div>
         </header>
 
-        <aside class="story-panel" aria-label="Story details">
+        <aside id="story-panel" class="story-panel" aria-label="Story details">
           <div class="panel-head">
-            <span id="active-category">Environment</span>
-            <span id="active-year">2026</span>
+            <div class="panel-kicker">
+              <span id="active-category">Environment</span>
+              <span id="active-year">2026</span>
+            </div>
+            <button id="panel-toggle" class="panel-toggle" type="button" aria-controls="story-panel-body" aria-expanded="true" aria-label="Collapse story details" title="Collapse story details">
+              <span class="collapse-icon" aria-hidden="true"></span>
+            </button>
           </div>
-          <h2 id="active-title">Loading stories...</h2>
-          <p id="active-summary"></p>
-          <dl class="meta-grid">
-            <div>
-              <dt>Place</dt>
-              <dd id="active-place"></dd>
-            </div>
-            <div>
-              <dt>Highlights</dt>
-              <dd id="active-strength"></dd>
-            </div>
-          </dl>
-          <div class="panel-actions">
-            <a id="active-link" class="button primary" target="_blank" rel="noreferrer" aria-label="Open story in new tab">Open story</a>
-            <div class="icon-actions">
-              <button id="focus-button" class="icon-button" type="button" aria-label="Show on map" title="Show on map">
-                <span class="map-icon" aria-hidden="true"></span>
-              </button>
-              <button id="autoplay-button" class="icon-button autoplay-button" type="button" aria-pressed="true" aria-label="Pause autoplay" title="Pause autoplay">
-                <span class="pause-icon" aria-hidden="true"></span>
-                <span id="autoplay-label" class="sr-only">Pause</span>
-              </button>
+          <div id="story-panel-body" class="panel-body">
+            <h2 id="active-title">Loading stories...</h2>
+            <p id="active-summary"></p>
+            <dl class="meta-grid">
+              <div>
+                <dt>Place</dt>
+                <dd id="active-place"></dd>
+              </div>
+              <div>
+                <dt>Highlights</dt>
+                <dd id="active-strength"></dd>
+              </div>
+            </dl>
+            <div class="panel-actions">
+              <a id="active-link" class="button primary" target="_blank" rel="noreferrer" aria-label="Open story in new tab">Open story</a>
+              <div class="icon-actions">
+                <button id="focus-button" class="icon-button" type="button" aria-label="Show on map" title="Show on map">
+                  <span class="map-icon" aria-hidden="true"></span>
+                </button>
+                <button id="autoplay-button" class="icon-button autoplay-button" type="button" aria-pressed="true" aria-label="Pause autoplay" title="Pause autoplay">
+                  <span class="pause-icon" aria-hidden="true"></span>
+                  <span id="autoplay-label" class="sr-only">Pause</span>
+                </button>
+              </div>
             </div>
           </div>
         </aside>

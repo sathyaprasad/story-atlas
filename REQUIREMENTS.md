@@ -129,6 +129,7 @@ Story Atlas is a dark, cinematic, map-based explorer for curated and award-winni
 - The accessible name for the link is `Open story in new tab`.
 - Clicking `Open story` pauses autoplay before the story opens, keeping the explorer on that story.
 - Secondary panel actions use compact icon-only controls aligned to the right of the primary action.
+- On mobile-width viewports, the story detail panel can collapse to reveal more of the globe.
 
 ### Acceptance Criteria
 - Detail content updates when the active story changes.
@@ -136,6 +137,7 @@ Story Atlas is a dark, cinematic, map-based explorer for curated and award-winni
 - Open story link has `target="_blank"` and `rel="noreferrer"`.
 - Open story link exposes the accessible name `Open story in new tab`.
 - Autoplay is paused immediately when the Open story link is clicked.
+- Mobile story detail collapse control exposes expanded/collapsed state and updates its accessible name.
 
 ## Carousel Requirements
 - Story list is a horizontal carousel.
@@ -183,6 +185,7 @@ Story Atlas is a dark, cinematic, map-based explorer for curated and award-winni
 - Year controls expose selected state.
 - Story detail panel exposes title, summary, place, highlights, and actions.
 - `Show on map`, `Pause autoplay`, and `Play autoplay` are named controls.
+- Story detail collapse/expand control is named and exposes `aria-expanded`.
 - Card selection is available through focusable buttons.
 - Keyboard focus states are visible for links, year controls, carousel cards, and icon buttons.
 - Open story link exposes `Open story in new tab` as its accessible name while keeping compact visible text.
@@ -199,6 +202,7 @@ Story Atlas is a dark, cinematic, map-based explorer for curated and award-winni
 ### Acceptance Criteria
 - Header, year selector, detail panel, globe label, and carousel do not overlap incoherently at common desktop widths.
 - At mobile widths, story detail content remains readable and controls remain tappable.
+- At mobile widths, users can collapse the story detail panel to view more of the globe.
 - At mobile widths, the year selector, Open story link, icon controls, and carousel cards remain reachable without horizontal page scrolling.
 - Text in buttons, cards, the detail panel, and the year selector fits within its container without clipping or covering adjacent UI.
 - Tap targets for primary actions, year controls, carousel cards, and icon buttons remain large enough for touch interaction.
@@ -232,6 +236,7 @@ Story Atlas is a dark, cinematic, map-based explorer for curated and award-winni
 - Verify year switching updates story count, carousel, detail panel, pins, and globe focus.
 - Verify autoplay advances after 10 seconds and can pause/resume.
 - Verify Open story pauses autoplay before opening a new tab.
+- Verify mobile story detail panel collapse and expand behavior.
 - Verify the accessibility tree contains expected landmarks, labels, and selected states.
 - Verify theme color contrast for card theme text.
 - Verify keyboard navigation can reach year controls, story cards, Open story, Show on map, and autoplay controls.

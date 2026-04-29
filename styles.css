@@ -282,8 +282,42 @@ h1 {
 .panel-head {
   display: flex;
   justify-content: space-between;
+  align-items: start;
   gap: 14px;
   margin-bottom: 14px;
+}
+
+.panel-kicker {
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+  width: 100%;
+}
+
+.panel-toggle {
+  display: none;
+  place-items: center;
+  flex: 0 0 auto;
+  width: 34px;
+  height: 34px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.055);
+  color: var(--text);
+  cursor: pointer;
+}
+
+.collapse-icon {
+  width: 9px;
+  height: 9px;
+  border-right: 2px solid var(--green);
+  border-bottom: 2px solid var(--green);
+  transform: translateY(2px) rotate(225deg);
+  transition: transform 160ms ease;
+}
+
+.story-panel.is-collapsed .collapse-icon {
+  transform: translateY(-2px) rotate(45deg);
 }
 
 .story-panel h2 {
@@ -536,6 +570,27 @@ a:focus-visible {
     bottom: 215px;
     width: auto;
     padding: 18px;
+  }
+
+  .story-panel.is-collapsed {
+    bottom: 156px;
+    padding: 12px 14px;
+  }
+
+  .story-panel.is-collapsed::after {
+    opacity: 0;
+  }
+
+  .story-panel.is-collapsed .panel-head {
+    margin-bottom: 0;
+  }
+
+  .story-panel.is-collapsed .panel-body {
+    display: none;
+  }
+
+  .panel-toggle {
+    display: inline-grid;
   }
 
   .year-switch {

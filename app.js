@@ -39,6 +39,7 @@ const elements = {
   focus: document.querySelector("#focus-button"),
   autoplay: document.querySelector("#autoplay-button"),
   autoplayLabel: document.querySelector("#autoplay-label"),
+  panelToggle: document.querySelector("#panel-toggle"),
   panel: document.querySelector(".story-panel"),
   health: document.querySelector("#render-health"),
 };
@@ -55,6 +56,7 @@ let autoplayTimerId;
 let targetRotation = new THREE.Vector2(0.2, -0.35);
 let pointerDown = false;
 let previousPointer = new THREE.Vector2();
+let isPanelCollapsed = false;
 
 elements.count.textContent = "0";
 
@@ -346,6 +348,17 @@ function setAutoplay(enabled) {
   resetAutoplayTimer();
 }
 
+function setPanelCollapsed(collapsed) {
+  isPanelCollapsed = collapsed;
+  elements.panel.classList.toggle("is-collapsed", collapsed);
+  elements.panelToggle.setAttribute("aria-expanded", String(!collapsed));
+  elements.panelToggle.setAttribute(
+    "aria-label",
+    collapsed ? "Expand story details" : "Collapse story details",
+  );
+  elements.panelToggle.title = collapsed ? "Expand story details" : "Collapse story details";
+}
+
 function updateAutoplayProgress(progress) {
   const percentage = `${Math.min(progress, 1) * 100}%`;
   elements.panel.style.setProperty("--autoplay-progress", percentage);
@@ -433,6 +446,7 @@ elements.yearButtons.forEach((button) => {
 });
 elements.focus.addEventListener("click", () => focusStory(activeStory));
 elements.autoplay.addEventListener("click", () => setAutoplay(!autoplayEnabled));
+elements.panelToggle.addEventListener("click", () => setPanelCollapsed(!isPanelCollapsed));
 elements.link.addEventListener("click", () => setAutoplay(false));
 elements.canvas.addEventListener("click", pickPin);
 elements.canvas.addEventListener("pointerdown", (event) => {
