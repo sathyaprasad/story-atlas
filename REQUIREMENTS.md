@@ -1,33 +1,148 @@
-# Story Atlas Requirements
+# Story Atlas Specification
 
 ## Product Goal
-Story Atlas is a dark, cinematic, map-based explorer for curated and award-winning ArcGIS StoryMaps. It should help viewers discover strong examples by year and open the original StoryMaps directly.
+Story Atlas is a dark, cinematic, map-based explorer for curated and award-winning ArcGIS StoryMaps. It helps viewers discover strong examples by year, understand why each story is notable, and open the original StoryMaps directly.
 
-## Current Experience
+## Experience Principles
+- The first screen is the explorer itself, not a landing page.
+- The app should feel cinematic, spatial, and polished while staying usable on common desktop and mobile viewports.
+- The UI should stay focused on discovery; avoid explanatory helper copy inside the app unless it directly supports an action.
+- Dark mode is the primary visual direction. A future light mode may adjust UI chrome, but the globe can remain dark and cinematic.
+
+## Brand And Assets
 - App name: Story Atlas.
 - Source/product label: ArcGIS StoryMaps, preserving trademark casing.
-- App icon uses the repo-local `assets/story-atlas-logo.png` image supplied by the user; the logo image is not shown in the page header.
-- First screen is the explorer itself, not a landing page.
-- Primary visual is a Three.js UV sphere using `assets/world.jpg` as a dark equirectangular Earth texture, plus subtle graticule, atmosphere, story pins, and one active story label.
-- Dark theme with glass panels, neon green year selector, cyan globe accents, and restrained category colors.
+- Page header uses text for the Story Atlas name; the supplied logo image is not shown in the page header.
+- App icon uses the repo-local `assets/story-atlas-logo.png` image supplied by the user.
+- Globe texture uses the repo-local `assets/world.jpg` image supplied by the user.
 
-## Story Data
-- Years available: 2026, 2025, 2024.
-- Story data lives in `stories.json`, grouped by year, so new stories can be added without editing `app.js`.
-- Story coordinates use decimal latitude/longitude. Regional or global stories may use representative center points rather than exact addresses.
-- Year selector lives in the top-right header area.
-- Selecting a year updates the story count, carousel, active details, visible pins, and focused globe position.
-- Open story links must point directly to `https://storymaps.arcgis.com/stories/...` or `https://storymaps.arcgis.com/briefings/...` or `https://storymaps.arcgis.com/frames/...`, not Esri listing pages or StoryMaps collection pages.
-- The Open story link should keep compact visible text while exposing the accessible name "Open story in new tab".
+### Acceptance Criteria
+- Browser title is `Story Atlas`.
+- `index.html` references `assets/story-atlas-logo.png` as favicon/app icon.
+- The visible header contains `ArcGIS StoryMaps` and `Story Atlas`.
+- No generated or remote replacement image is used for the globe texture.
+
+## Data Contract
+- Story data lives in `stories.json`, grouped by year.
+- Supported years are `2026`, `2025`, and `2024`.
+- New stories should be addable through `stories.json` without editing story-rendering logic in `app.js`.
+- Each story entry must include:
+  - `title`: display title.
+  - `place`: human-readable location or representative region.
+  - `lat`: decimal latitude.
+  - `lon`: decimal longitude.
+  - `theme`: category shown in the detail panel and carousel card.
+  - `award`: award/year label shown in the detail panel.
+  - `url`: direct StoryMaps URL.
+  - `summary`: short story description.
+  - `strength`: highlights shown in the detail panel.
+  - `color`: legacy/fallback story color.
+- Valid story URLs must start with one of:
+  - `https://storymaps.arcgis.com/stories/`
+  - `https://storymaps.arcgis.com/briefings/`
+  - `https://storymaps.arcgis.com/frames/`
+- Story coordinates may use representative center points for regional or global stories.
+
+### Acceptance Criteria
+- JSON parsing succeeds with no runtime errors.
+- Every story has all required fields.
+- Every `lat` and `lon` value is numeric.
+- Every `url` uses one of the allowed direct StoryMaps URL prefixes.
+- Selecting a year updates the visible stories without changing `stories.json`.
+
+## Theme Color Contract
+- Theme color is the shared visual identity for story themes.
+- `app.js` owns the theme-level color map.
+- Story card theme text and globe pins must use the same theme-level color for a given theme.
+- Story-level `color` remains available only as a fallback for themes missing from the theme color map.
+
+### Current Themes
+- Conservation
+- Digital Humanities
+- Environment
+- Health and Safety
+- Humanitarian Response
+- Infrastructure
+- Nature
+- People
+- Planning and Infrastructure
+- Research
+
+### Acceptance Criteria
+- Every theme in `stories.json` has a theme color in `app.js`.
+- Card theme text uses the story's resolved theme color.
+- Pin base, halo, and stem use the story's resolved theme color.
+- Theme text contrast should meet WCAG AA for normal text against the card background.
+- Active cards and pins must not rely on color alone; they also need shape, border, scale, pulse, or state changes.
 
 ## Globe Requirements
 - Use Three.js for the main map/globe.
 - Globe should feel abstract and cinematic, inspired by 2050.earth, while staying readable.
-- Globe texture should use the repo-local `assets/world.jpg` image supplied by the user.
+- Globe uses a UV sphere with the local `assets/world.jpg` equirectangular texture.
+- Globe includes subtle graticule lines, atmosphere, stars, story pins, and one active story label.
 - Globe must not use generated green land patches, cyan dotted land clusters, filled land blobs, or noisy procedural speckles.
-- Selecting a story must rotate the globe so the active pin is centered toward the camera.
-- Only the active pin label should be visible.
-- Only the active pin should pulse; inactive pins remain steady.
+- Selecting a story rotates the globe so the active pin is centered toward the camera.
+- Only the active pin label is visible.
+- Only the active pin pulses; inactive pins remain steady.
+- Users can drag the globe, but carousel/story selection remains the accessible primary selection path.
+
+### Acceptance Criteria
+- `#render-health` becomes `Three.js render active` after a successful render.
+- Selecting a story updates the active pin, active label, detail panel, and focused globe position.
+- Changing years hides pins from other years.
+- Inactive pins do not pulse.
+- The active label remains limited to the selected story.
+
+## Year Selection Requirements
+- Year selector lives in the top-right header area.
+- Selecting a year updates:
+  - story count.
+  - carousel stories.
+  - active detail panel.
+  - visible pins.
+  - focused globe position.
+- The first story in the selected year becomes active.
+
+### Acceptance Criteria
+- The active year control exposes selected state.
+- Story count matches the number of entries for the selected year.
+- Switching years resets the autoplay timer.
+- Switching years does not require a page reload.
+
+## Story Detail Requirements
+- Story detail panel shows:
+  - theme/category.
+  - award/year label.
+  - title.
+  - summary.
+  - place.
+  - highlights.
+- Primary action is `Open story`.
+- `Open story` opens the current story URL in a new tab.
+- The visible action text stays compact as `Open story`.
+- The accessible name for the link is `Open story in new tab`.
+- Clicking `Open story` pauses autoplay before the story opens, keeping the explorer on that story.
+- Secondary panel actions use compact icon-only controls aligned to the right of the primary action.
+
+### Acceptance Criteria
+- Detail content updates when the active story changes.
+- Open story link `href` matches the active story URL.
+- Open story link has `target="_blank"` and `rel="noreferrer"`.
+- Open story link exposes the accessible name `Open story in new tab`.
+- Autoplay is paused immediately when the Open story link is clicked.
+
+## Carousel Requirements
+- Story list is a horizontal carousel.
+- Carousel cards are generated from the selected year's stories.
+- Clicking a card selects that story.
+- Active card scrolls into view automatically.
+- Active card exposes `aria-current="true"`.
+
+### Acceptance Criteria
+- Carousel contains only stories from the selected year.
+- Active card changes when autoplay advances, a card is clicked, a pin is clicked, or the year changes.
+- Active card is visually distinguishable without relying only on color.
+- Active card scrolls into view when selection changes.
 
 ## Autoplay Requirements
 - Autoplay starts enabled when the app loads.
@@ -35,22 +150,75 @@ Story Atlas is a dark, cinematic, map-based explorer for curated and award-winni
 - Advancing updates the selected card, story detail panel, active pin, active label, and centered globe focus.
 - The detail panel contains a play/pause control for autoplay.
 - The detail panel shows a subtle progress indicator for the 10-second interval.
-- Clicking Open story pauses autoplay before the story opens in a new tab, keeping the explorer on that story.
+- Autoplay resets when the user manually selects a story or changes year.
 
-## UI Requirements
-- Story detail panel shows category, award/year label, title, summary, place, and highlights.
-- Story list is a horizontal carousel.
-- Story card theme text and globe pins must use the same theme-level color for a given theme.
-- When the active story changes, the carousel should scroll the selected card into view.
-- Search/theme filtering is intentionally removed for now and may be revisited later.
-- Text should not overlap on common desktop/mobile viewports.
-- Avoid extra explanatory text inside the app UI.
-- Secondary panel actions use compact icon-only controls aligned to the right of the primary action.
-- Vercel Speed Insights should be initialized from the vanilla JavaScript entry so deployed Vercel traffic reports Core Web Vitals without adding visible UI.
+### Acceptance Criteria
+- Autoplay button exposes `aria-pressed`.
+- Autoplay button accessible label changes between `Pause autoplay` and `Play autoplay`.
+- Pausing autoplay stops automatic advancement and clears the progress indicator.
+- Resuming autoplay starts a fresh 10-second interval.
+- Years with fewer than two stories do not schedule unnecessary advancement.
+
+## Accessibility Requirements
+- The app must keep a meaningful heading structure with one visible `h1`.
+- Decorative canvas, scanline, icon spans, and visual-only globe labels must be hidden from assistive technology when they duplicate accessible content elsewhere.
+- Main regions should be labelled where helpful:
+  - interactive globe region.
+  - story details panel.
+  - story list navigation.
+  - year selector.
+- Icon-only controls must have accessible names.
+- Open story link must communicate that it opens a new tab.
+- Keyboard users must be able to select stories through the carousel and year selector.
+- Color must not be the only selected/active state indicator.
+
+### Acceptance Criteria
+- Browser accessibility tree exposes `Story Atlas` as a heading.
+- Year controls expose selected state.
+- Story detail panel exposes title, summary, place, highlights, and actions.
+- `Show on map`, `Pause autoplay`, and `Play autoplay` are named controls.
+- Card selection is available through focusable buttons.
+- No meaningful image lacks alt text; decorative/non-content imagery is hidden or used only as an app icon.
+
+## Responsive UI Requirements
+- Text should not overlap on common desktop and mobile viewports.
+- Cards, controls, and panels should use stable dimensions so hover, labels, icons, and dynamic content do not shift layout unexpectedly.
+- Mobile layout may stack metadata and reposition the detail panel above the carousel.
+- Avoid page-level scrolling on desktop; mobile may scroll when needed.
+
+### Acceptance Criteria
+- Header, year selector, detail panel, globe label, and carousel do not overlap incoherently at common desktop widths.
+- At mobile widths, story detail content remains readable and controls remain tappable.
+- Carousel remains horizontally scrollable.
+
+## Analytics And Runtime Requirements
+- Vercel Speed Insights should be initialized from the vanilla JavaScript entry for deployed Vercel traffic.
+- Speed Insights must not add visible UI.
 - Localhost development should not inject the Vercel Speed Insights runtime request, avoiding expected local 404 noise from the Python static server.
 
-## Verification Notes
-- After visual or interaction changes, verify in the in-app browser at localhost.
-- Check that Three.js render health is active.
-- Check console warnings/errors.
-- Check direct story links remain direct StoryMaps story/briefing URLs.
+### Acceptance Criteria
+- Non-localhost pages call `injectSpeedInsights()`.
+- Localhost pages skip Speed Insights injection.
+- Local Python server logs do not show expected Speed Insights 404 noise after reload.
+
+## Non-Goals
+- No landing page.
+- No search or theme filtering for now.
+- No visible logo image in the page header.
+- No generated procedural land masses or decorative map speckle overlays.
+- No complex routing or build system; the app remains vanilla HTML/CSS/JS.
+- No server-side data dependency; `stories.json` is the source of truth.
+
+## Verification Checklist
+- Start local server, usually `python3 -m http.server 5173` or another available port.
+- Open the app in the in-app browser at localhost.
+- Verify Three.js render health is active.
+- Verify browser console warnings/errors.
+- Verify story data loads and the default year is populated.
+- Verify direct StoryMaps URL prefixes.
+- Verify year switching updates story count, carousel, detail panel, pins, and globe focus.
+- Verify autoplay advances after 10 seconds and can pause/resume.
+- Verify Open story pauses autoplay before opening a new tab.
+- Verify the accessibility tree contains expected landmarks, labels, and selected states.
+- Verify theme color contrast for card theme text.
+- Verify no text overlap on desktop and mobile viewports after visual changes.
