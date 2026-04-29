@@ -29,6 +29,7 @@ const elements = {
   count: document.querySelector("#story-count"),
   list: document.querySelector("#story-list"),
   yearButtons: [...document.querySelectorAll("[data-year]")],
+  yearSelect: document.querySelector("#year-select"),
   category: document.querySelector("#active-category"),
   year: document.querySelector("#active-year"),
   title: document.querySelector("#active-title"),
@@ -315,6 +316,7 @@ function selectYear(year) {
     button.setAttribute("aria-selected", String(isActive));
     button.tabIndex = isActive ? 0 : -1;
   });
+  elements.yearSelect.value = activeYear;
   if (visibleStories.length) {
     selectStory(visibleStories[0], true);
   }
@@ -444,6 +446,7 @@ window.addEventListener("resize", resize);
 elements.yearButtons.forEach((button) => {
   button.addEventListener("click", () => selectYear(button.dataset.year));
 });
+elements.yearSelect.addEventListener("change", () => selectYear(elements.yearSelect.value));
 elements.focus.addEventListener("click", () => focusStory(activeStory));
 elements.autoplay.addEventListener("click", () => setAutoplay(!autoplayEnabled));
 elements.panelToggle.addEventListener("click", () => setPanelCollapsed(!isPanelCollapsed));
