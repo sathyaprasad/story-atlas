@@ -9,6 +9,12 @@ Story Atlas is a dark, cinematic, map-based explorer for curated and award-winni
 - The UI should stay focused on discovery; avoid explanatory helper copy inside the app unless it directly supports an action.
 - Dark mode is the primary visual direction. A future light mode may adjust UI chrome, but the globe can remain dark and cinematic.
 
+### Release Acceptance Criteria
+- The app must satisfy the Accessibility Requirements acceptance criteria before release.
+- The app must satisfy the Responsive UI Requirements acceptance criteria before release.
+- The app must be verified in the in-app browser on at least one desktop viewport and one mobile-width viewport after visual or interaction changes.
+- No release should introduce console errors, inaccessible icon-only controls, missing accessible names, keyboard-blocking story selection, or overlapping text on common desktop/mobile viewports.
+
 ## Brand And Assets
 - App name: Story Atlas.
 - Source/product label: ArcGIS StoryMaps, preserving trademark casing.
@@ -178,6 +184,10 @@ Story Atlas is a dark, cinematic, map-based explorer for curated and award-winni
 - Story detail panel exposes title, summary, place, highlights, and actions.
 - `Show on map`, `Pause autoplay`, and `Play autoplay` are named controls.
 - Card selection is available through focusable buttons.
+- Keyboard focus states are visible for links, year controls, carousel cards, and icon buttons.
+- Open story link exposes `Open story in new tab` as its accessible name while keeping compact visible text.
+- Story selection is not dependent on pointer-only globe pin interaction; the carousel remains the keyboard-accessible selection path.
+- Visual-only globe labels do not duplicate all story labels into the accessibility tree.
 - No meaningful image lacks alt text; decorative/non-content imagery is hidden or used only as an app icon.
 
 ## Responsive UI Requirements
@@ -189,6 +199,9 @@ Story Atlas is a dark, cinematic, map-based explorer for curated and award-winni
 ### Acceptance Criteria
 - Header, year selector, detail panel, globe label, and carousel do not overlap incoherently at common desktop widths.
 - At mobile widths, story detail content remains readable and controls remain tappable.
+- At mobile widths, the year selector, Open story link, icon controls, and carousel cards remain reachable without horizontal page scrolling.
+- Text in buttons, cards, the detail panel, and the year selector fits within its container without clipping or covering adjacent UI.
+- Tap targets for primary actions, year controls, carousel cards, and icon buttons remain large enough for touch interaction.
 - Carousel remains horizontally scrollable.
 
 ## Analytics And Runtime Requirements
@@ -221,4 +234,5 @@ Story Atlas is a dark, cinematic, map-based explorer for curated and award-winni
 - Verify Open story pauses autoplay before opening a new tab.
 - Verify the accessibility tree contains expected landmarks, labels, and selected states.
 - Verify theme color contrast for card theme text.
-- Verify no text overlap on desktop and mobile viewports after visual changes.
+- Verify keyboard navigation can reach year controls, story cards, Open story, Show on map, and autoplay controls.
+- Verify no text overlap, clipping, or unreachable controls on desktop and mobile-width viewports after visual changes.
