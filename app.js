@@ -332,7 +332,7 @@ async function updateStoryThumbnail(story) {
         if (item.thumbnail) {
           thumbnailUrl = item.thumbnail.startsWith("http")
             ? item.thumbnail
-            : `https://www.arcgis.com/sharing/rest/content/items/${itemId}/info/${item.thumbnail}?w=400`;
+            : `https://www.arcgis.com/sharing/rest/content/items/${itemId}/info/${item.thumbnail}`;
         }
       }
     } catch {
@@ -345,6 +345,11 @@ async function updateStoryThumbnail(story) {
     return;
   }
 
+  elements.thumbnail.onload = () => {
+    if (elements.thumbnail.dataset.storyUrl === story.url) {
+      elements.thumbnail.hidden = false;
+    }
+  };
   elements.thumbnail.onerror = () => {
     if (elements.thumbnail.dataset.storyUrl === story.url) {
       elements.thumbnail.hidden = true;
@@ -352,7 +357,6 @@ async function updateStoryThumbnail(story) {
     }
   };
   elements.thumbnail.src = thumbnailUrl;
-  elements.thumbnail.hidden = false;
 }
 
 function selectYear(year) {
