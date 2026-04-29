@@ -291,7 +291,8 @@ h1 {
   display: flex;
   justify-content: space-between;
   gap: 14px;
-  width: 100%;
+  flex: 1;
+  min-width: 0;
 }
 
 .panel-toggle {
@@ -550,18 +551,28 @@ a:focus-visible {
 @media (max-width: 760px) {
   body {
     overflow: auto;
+    overflow-x: hidden;
   }
 
   .map-stage {
     min-height: 100svh;
+    width: 100vw;
+    max-width: 100vw;
   }
 
   .topbar {
     align-items: start;
+    flex-direction: column;
+    gap: 14px;
   }
 
   .top-actions {
+    justify-items: start;
     gap: 8px;
+  }
+
+  .status-pill {
+    display: none;
   }
 
   .story-panel {
@@ -569,6 +580,7 @@ a:focus-visible {
     right: 14px;
     bottom: 215px;
     width: auto;
+    max-width: calc(100vw - 28px);
     padding: 18px;
   }
 
@@ -589,8 +601,24 @@ a:focus-visible {
     display: none;
   }
 
+  .panel-head {
+    align-items: center;
+  }
+
+  .panel-kicker {
+    flex-direction: column;
+    justify-content: start;
+    gap: 4px;
+  }
+
   .panel-toggle {
     display: inline-grid;
+    position: absolute;
+    z-index: 2;
+    top: 14px;
+    left: min(220px, calc(100vw - 76px));
+    border-color: rgba(131, 247, 177, 0.42);
+    background: rgba(131, 247, 177, 0.11);
   }
 
   .year-switch {
@@ -624,6 +652,7 @@ a:focus-visible {
     left: 0;
     right: 0;
     bottom: 0;
+    max-width: 100vw;
     border-right: 0;
     border-bottom: 0;
     border-left: 0;
