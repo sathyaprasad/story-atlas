@@ -18,6 +18,7 @@ Story Atlas is a dark, cinematic, map-based explorer for curated and award-winni
 - Year selector lives in the top-right header area.
 - Selecting a year updates the story count, carousel, active details, visible pins, and focused globe position.
 - Open story links must point directly to `https://storymaps.arcgis.com/stories/...` or `https://storymaps.arcgis.com/briefings/...` or `https://storymaps.arcgis.com/frames/...`, not Esri listing pages or StoryMaps collection pages.
+- The Open story link should keep compact visible text while exposing the accessible name "Open story in new tab".
 
 ## Globe Requirements
 - Use Three.js for the main map/globe.
