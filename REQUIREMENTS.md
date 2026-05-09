@@ -222,6 +222,33 @@ Story Atlas is a dark, cinematic, map-based explorer for curated and award-winni
 - Localhost pages skip Speed Insights injection.
 - Local Python server logs do not show expected Speed Insights 404 noise after reload.
 
+## SEO And Discoverability Requirements
+- The app should explain its utility to search engines as a curated ArcGIS StoryMaps explorer, not only as an interactive canvas.
+- Search metadata should describe the core feature set: 3D globe, yearly collections, themes, places, highlights, and direct StoryMaps links.
+- The page head should include the Google Search Console verification meta tag for the deployed property.
+- The first viewport should include concise visible copy explaining that Story Atlas is an ArcGIS StoryMaps explorer organized by year, theme, and place.
+- The canonical URL should point to the current page path without year/story query parameters.
+- Story selection state may be represented with `year` and `story` query parameters for sharing and crawler-visible app state.
+- Structured data should be generated from `stories.json` so the metadata stays aligned with the curated collection.
+- A crawlable story index should expose every StoryMaps URL with visible title, year grouping, theme, place, and highlight text.
+- Production deployments should allow crawling unless a future release explicitly opts out.
+- Current deployed canonical domain is `https://story-atlas-zeta.vercel.app`.
+- `robots.txt` and `sitemap.xml` should be kept aligned with the deployed canonical domain.
+- Runtime app code must derive the active origin from `window.location`; do not hardcode the production URL outside static SEO files or documentation.
+- The production sitemap should include the homepage and shareable story states.
+
+### Acceptance Criteria
+- `index.html` includes a descriptive title, meta description, robots directive, Google site verification, theme color, Open Graph, and Twitter summary metadata.
+- The app sets a canonical link for the current pathname and excludes transient query parameters from the canonical URL.
+- Rendered HTML contains JSON-LD describing Story Atlas as a `WebApplication`, the curated collection as a `Dataset`, and stories as an `ItemList` of `CreativeWork` items.
+- The crawlable story index contains all stories from `stories.json`.
+- Each story index entry links to the direct StoryMaps URL and includes visible theme, place, and highlight text.
+- Loading `?year=YYYY&story=ITEM_ID` selects the matching year/story when present.
+- `robots.txt` allows crawlers to request the public app.
+- `sitemap.xml` lists the homepage and all shareable story state URLs using StoryMaps item IDs.
+- Local development URLs continue to produce localhost canonical, social, structured-data, and query-state URLs at runtime.
+- If the deployment moves from `story-atlas-zeta.vercel.app` to another domain, canonical, sitemap, robots, and social URLs are updated together.
+
 ## Non-Goals
 - No landing page.
 - No search or theme filtering for now.

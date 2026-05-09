@@ -10,6 +10,10 @@ if (!isLocalHost) {
 let storyData;
 let stories = [];
 
+const initialParams = new URLSearchParams(window.location.search);
+const initialYear = initialParams.get("year");
+const initialStorySlug = initialParams.get("story");
+
 const THEME_COLORS = {
   Conservation: "#52d9ff",
   "Digital Humanities": "#b8a4ff",
@@ -43,13 +47,18 @@ const elements = {
   panelToggle: document.querySelector("#panel-toggle"),
   panel: document.querySelector(".story-panel"),
   health: document.querySelector("#render-health"),
+  storyIndex: document.querySelector("#seo-story-index-list"),
+  canonical: document.querySelector("#canonical-link"),
 };
 
-let activeYear = "2026";
+let activeYear = ["2026", "2025", "2024"].includes(initialYear)
+  ? initialYear
+  : "2026";
 let visibleStories = [];
 let activeStory;
 let storyPins = [];
 let storyLabels = [];
+let pendingInitialStoryId = initialStorySlug;
 const AUTOPLAY_INTERVAL = 10000;
 let autoplayEnabled = true;
 let autoplayStartedAt = performance.now();
@@ -275,7 +284,40 @@ function renderList() {
   });
 }
 
-function selectStory(story, focusGlobe = false, resetAutoplay = true) {
+function renderStoryIndex() {
+  elements.storyIndex.innerHTML = "";
+  const fragment = document.createDocumentFragment();
+  const years = Object.keys(storyData).sort((a, b) => b.localeCompare(a));
+
+  for (const year of years) {
+    const section = document.createElement("section");
+    const heading = document.createElement("h3");
+    const list = document.createElement("ol");
+    heading.textContent = year;
+
+    for (const story of stories.filter((entry) => entry.year === year)) {
+      const item = document.createElement("li");
+      const link = document.createElement("a");
+      const meta = document.createElement("span");
+      const summary = document.createElement("span");
+      link.href = story.url;
+      link.target = "_blank";
+      link.rel = "noreferrer";
+      link.textContent = story.title;
+      meta.textContent = `${story.theme} · ${story.place}`;
+      summary.textContent = story.strength;
+      item.append(link, meta, summary);
+      list.append(item);
+    }
+
+    section.append(heading, list);
+    fragment.append(section);
+  }
+
+  elements.storyIndex.append(fragment);
+}
+
+function selectStory(story, focusGlobe = false, resetAutoplay = true, updateLocation = true) {
   activeStory = story;
   if (resetAutoplay) {
     resetAutoplayTimer();
@@ -305,6 +347,9 @@ function selectStory(story, focusGlobe = false, resetAutoplay = true) {
   renderList();
   if (focusGlobe) {
     focusStory(story);
+  }
+  if (updateLocation) {
+    updateUrlState();
   }
 }
 
@@ -371,13 +416,133 @@ function selectYear(year) {
   });
   elements.yearSelect.value = activeYear;
   if (visibleStories.length) {
-    selectStory(visibleStories[0], true);
+    const requestedStoryId = pendingInitialStoryId;
+    const requestedStory = visibleStories.find((story) => getStoryItemId(story) === requestedStoryId);
+    selectStory(requestedStory ?? visibleStories[0], true);
+    pendingInitialStoryId = "";
   }
 }
 
 function focusStory(story) {
   targetRotation.x = THREE.MathUtils.degToRad(story.lat);
   targetRotation.y = THREE.MathUtils.degToRad(-story.lon - 90);
+}
+
+function updateUrlState() {
+  if (!activeStory) {
+    return;
+  }
+  const url = new URL(window.location.pathname, window.location.origin);
+  url.searchParams.set("year", activeYear);
+  url.searchParams.set("story", getStoryItemId(activeStory));
+  window.history.replaceState({}, "", url);
+}
+
+function setSeoMetadata() {
+  const canonicalUrl = new URL(window.location.pathname, window.location.origin);
+  const logoUrl = new URL("./assets/story-atlas-logo.png", window.location.href);
+  elements.canonical.href = canonicalUrl.href;
+  setMeta("property", "og:url", canonicalUrl.href);
+  setMeta("property", "og:image", logoUrl.href);
+  setMeta("name", "twitter:image", logoUrl.href);
+  injectStructuredData(canonicalUrl.href);
+}
+
+function setMeta(attribute, name, content) {
+  let tag = document.head.querySelector(`meta[${attribute}="${name}"]`);
+  if (!tag) {
+    tag = document.createElement("meta");
+    tag.setAttribute(attribute, name);
+    document.head.append(tag);
+  }
+  tag.content = content;
+}
+
+function injectStructuredData(pageUrl) {
+  const themes = [...new Set(stories.map((story) => story.theme))].sort();
+  const places = [...new Set(stories.map((story) => story.place))].sort();
+  const graph = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebApplication",
+        "@id": `${pageUrl}#app`,
+        name: "Story Atlas",
+        url: pageUrl,
+        applicationCategory: "EducationalApplication",
+        operatingSystem: "Any",
+        description:
+          "An interactive 3D globe for discovering curated ArcGIS StoryMaps by year, theme, place, and storytelling highlight.",
+        featureList: [
+          "Interactive Three.js globe with story pins",
+          "Year filters for 2026, 2025, and 2024 StoryMaps",
+          "Story carousel with theme, place, and highlight metadata",
+          "Direct links to original ArcGIS StoryMaps",
+        ],
+      },
+      {
+        "@type": "Dataset",
+        "@id": `${pageUrl}#dataset`,
+        name: "Story Atlas curated ArcGIS StoryMaps collection",
+        url: pageUrl,
+        description:
+          "A curated collection of ArcGIS StoryMaps examples grouped by year with themes, places, coordinates, summaries, and storytelling highlights.",
+        keywords: themes,
+        temporalCoverage: "2024/2026",
+        spatialCoverage: places.map((place) => ({
+          "@type": "Place",
+          name: place,
+        })),
+        isAccessibleForFree: true,
+        variableMeasured: [
+          "Story title",
+          "Story year",
+          "Theme",
+          "Place",
+          "Latitude",
+          "Longitude",
+          "Summary",
+          "Highlight",
+        ],
+      },
+      {
+        "@type": "ItemList",
+        "@id": `${pageUrl}#stories`,
+        name: "Curated ArcGIS StoryMaps in Story Atlas",
+        numberOfItems: stories.length,
+        itemListElement: stories.map((story, index) => ({
+          "@type": "ListItem",
+          position: index + 1,
+          item: {
+            "@type": "CreativeWork",
+            name: story.title,
+            url: story.url,
+            description: story.summary,
+            genre: story.theme,
+            temporalCoverage: story.year,
+            contentLocation: {
+              "@type": "Place",
+              name: story.place,
+              geo: {
+                "@type": "GeoCoordinates",
+                latitude: story.lat,
+                longitude: story.lon,
+              },
+            },
+            about: story.strength,
+          },
+        })),
+      },
+    ],
+  };
+  let script = document.querySelector("#story-atlas-structured-data");
+  if (!script) {
+    script = document.createElement("script");
+    script.id = "story-atlas-structured-data";
+    script.type = "application/ld+json";
+    document.head.append(script);
+  }
+  script.textContent = JSON.stringify(graph);
 }
 
 function resetAutoplayTimer() {
@@ -536,6 +701,8 @@ async function loadStories() {
   );
   createStoryPins();
   createStoryLabels();
+  renderStoryIndex();
+  setSeoMetadata();
   selectYear(activeYear);
   setAutoplay(true);
 }

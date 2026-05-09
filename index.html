@@ -3,7 +3,29 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Story Atlas</title>
+    <title>Story Atlas | Curated ArcGIS StoryMaps Explorer</title>
+    <meta
+      name="description"
+      content="Explore curated ArcGIS StoryMaps by year, theme, place, and storytelling highlight on an interactive 3D globe."
+    />
+    <meta name="robots" content="index, follow" />
+    <meta name="theme-color" content="#05070b" />
+    <meta name="google-site-verification" content="SbNJOSDddOTfnFlDBcYILVaxo4CKVcikCSUipGFZsyI" />
+    <meta property="og:site_name" content="Story Atlas" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Story Atlas | Curated ArcGIS StoryMaps Explorer" />
+    <meta
+      property="og:description"
+      content="Discover strong ArcGIS StoryMaps examples through a cinematic globe, yearly collections, themes, highlights, and direct story links."
+    />
+    <meta property="og:image" content="./assets/story-atlas-logo.png" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="Story Atlas | Curated ArcGIS StoryMaps Explorer" />
+    <meta
+      name="twitter:description"
+      content="Explore curated ArcGIS StoryMaps by year, theme, place, and storytelling highlight."
+    />
+    <link id="canonical-link" rel="canonical" href="/" />
     <link rel="icon" type="image/png" href="./assets/story-atlas-logo.png" />
     <link rel="apple-touch-icon" href="./assets/story-atlas-logo.png" />
     <link rel="preconnect" href="https://unpkg.com" />
@@ -21,6 +43,7 @@
           <div>
             <p class="eyebrow">ArcGIS StoryMaps</p>
             <h1>Story Atlas</h1>
+            <p class="intro-copy">Explore curated ArcGIS StoryMaps stories by year, theme, and place through an interactive globe and story carousel.</p>
           </div>
           <div class="top-actions">
             <div class="year-switch" role="tablist" aria-label="Story year">
@@ -83,7 +106,30 @@
           <ol id="story-list" class="story-list"></ol>
         </nav>
       </section>
+
+      <section class="story-index" aria-labelledby="story-index-title">
+        <div class="story-index-inner">
+          <p class="eyebrow">Curated ArcGIS StoryMaps index</p>
+          <h2 id="story-index-title">Stories by year, theme, and place</h2>
+          <p>
+            Browse the full Story Atlas collection as crawlable links. Each story includes its
+            theme, location, and highlight so search engines and visitors can understand the
+            utility of the collection beyond the interactive globe.
+          </p>
+          <div id="seo-story-index-list" class="story-index-list"></div>
+        </div>
+      </section>
     </main>
+
+    <noscript>
+      <section class="noscript-summary" aria-label="Story Atlas summary">
+        <h2>Story Atlas requires JavaScript for the interactive globe.</h2>
+        <p>
+          Story Atlas is a curated explorer for ArcGIS StoryMaps, organized by 2026, 2025,
+          and 2024 collections with themes, places, highlights, and direct StoryMaps links.
+        </p>
+      </section>
+    </noscript>
 
     <script type="importmap">
       {
