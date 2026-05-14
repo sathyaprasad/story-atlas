@@ -216,11 +216,16 @@ Story Atlas is a dark, cinematic, map-based explorer for curated and award-winni
 - Vercel Speed Insights should be initialized from the vanilla JavaScript entry for deployed Vercel traffic.
 - Speed Insights must not add visible UI.
 - Localhost development should not inject the Vercel Speed Insights runtime request, avoiding expected local 404 noise from the Python static server.
+- Vercel project linkage is documented in `VERCEL.md`.
+- `.vercel/project.json` should retain Vercel's internal `orgId` value `team_S4VpOXzLYuqMsfPFdfLW5gz5`.
+- Vercel API/plugin calls should use the scope slug `sathyaprasad` when a team/scope value is required.
 
 ### Acceptance Criteria
 - Non-localhost pages call `injectSpeedInsights()`.
 - Localhost pages skip Speed Insights injection.
 - Local Python server logs do not show expected Speed Insights 404 noise after reload.
+- `.vercel/project.json` contains project ID `prj_4d3S2Ll3939zDZbF7lVWIAEJKNmE` and org ID `team_S4VpOXzLYuqMsfPFdfLW5gz5`.
+- `VERCEL.md` distinguishes the internal Vercel org ID from the API/plugin scope slug.
 
 ## SEO And Discoverability Requirements
 - The app should explain its utility to search engines as a curated ArcGIS StoryMaps explorer, not only as an interactive canvas.
