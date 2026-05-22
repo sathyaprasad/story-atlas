@@ -34,6 +34,7 @@ const elements = {
   list: document.querySelector("#story-list"),
   yearButtons: [...document.querySelectorAll("[data-year]")],
   yearSelect: document.querySelector("#year-select"),
+  basemapButtons: [...document.querySelectorAll("[data-basemap]")],
   category: document.querySelector("#active-category"),
   year: document.querySelector("#active-year"),
   title: document.querySelector("#active-title"),
@@ -60,6 +61,24 @@ let storyPins = [];
 let storyLabels = [];
 let pendingInitialStoryId = initialStorySlug;
 const AUTOPLAY_INTERVAL = 10000;
+const BASEMAPS = {
+  dark: {
+    texture: "./assets/world.jpg",
+    opacity: 0.86,
+    emissive: "#07111a",
+    emissiveIntensity: 0.08,
+    atmosphere: "#52d9ff",
+    atmosphereOpacity: 0.075,
+  },
+  light: {
+    texture: "./assets/world-light.jpeg",
+    opacity: 0.92,
+    emissive: "#f4f7f8",
+    emissiveIntensity: 0.035,
+    atmosphere: "#ffffff",
+    atmosphereOpacity: 0.045,
+  },
+};
 let autoplayEnabled = true;
 let autoplayStartedAt = performance.now();
 let autoplayTimerId;
@@ -68,6 +87,8 @@ let pointerDown = false;
 let previousPointer = new THREE.Vector2();
 let isPanelCollapsed = false;
 const thumbnailCache = new Map();
+const basemapTextures = new Map();
+let activeBasemap = "dark";
 
 elements.count.textContent = "0";
 
@@ -85,26 +106,50 @@ camera.position.set(0, 0, 5.1);
 const globeGroup = new THREE.Group();
 scene.add(globeGroup);
 
-const earthTexture = new THREE.TextureLoader().load("./assets/world.jpg", (loadedTexture) => {
-  loadedTexture.colorSpace = THREE.SRGBColorSpace;
-  loadedTexture.anisotropy = renderer.capabilities.getMaxAnisotropy();
-  loadedTexture.needsUpdate = true;
-});
-earthTexture.colorSpace = THREE.SRGBColorSpace;
+const textureLoader = new THREE.TextureLoader();
 
-const globe = new THREE.Mesh(
-  new THREE.SphereGeometry(1.45, 128, 64),
-  new THREE.MeshStandardMaterial({
-    map: earthTexture,
-    transparent: true,
-    opacity: 0.86,
-    roughness: 0.9,
-    metalness: 0.02,
-    emissive: new THREE.Color("#07111a"),
-    emissiveIntensity: 0.08,
-  }),
-);
+function loadBasemapTexture(key) {
+  if (basemapTextures.has(key)) {
+    return basemapTextures.get(key);
+  }
+  const texture = textureLoader.load(BASEMAPS[key].texture, (loadedTexture) => {
+    loadedTexture.colorSpace = THREE.SRGBColorSpace;
+    loadedTexture.anisotropy = renderer.capabilities.getMaxAnisotropy();
+    loadedTexture.needsUpdate = true;
+  });
+  texture.colorSpace = THREE.SRGBColorSpace;
+  basemapTextures.set(key, texture);
+  return texture;
+}
+
+const earthTexture = loadBasemapTexture(activeBasemap);
+const globeMaterial = new THREE.MeshStandardMaterial({
+  map: earthTexture,
+  transparent: true,
+  opacity: BASEMAPS.dark.opacity,
+  roughness: 0.9,
+  metalness: 0.02,
+  emissive: new THREE.Color(BASEMAPS.dark.emissive),
+  emissiveIntensity: BASEMAPS.dark.emissiveIntensity,
+});
+
+const globe = new THREE.Mesh(new THREE.SphereGeometry(1.45, 128, 64), globeMaterial);
 globeGroup.add(globe);
+
+function selectBasemap(key) {
+  const basemap = BASEMAPS[key] ?? BASEMAPS.dark;
+  activeBasemap = BASEMAPS[key] ? key : "dark";
+  globeMaterial.map = loadBasemapTexture(activeBasemap);
+  globeMaterial.opacity = basemap.opacity;
+  globeMaterial.emissive.set(basemap.emissive);
+  globeMaterial.emissiveIntensity = basemap.emissiveIntensity;
+  globeMaterial.needsUpdate = true;
+  atmosphere.material.color.set(basemap.atmosphere);
+  atmosphere.material.opacity = basemap.atmosphereOpacity;
+  elements.basemapButtons.forEach((button) => {
+    button.setAttribute("aria-pressed", String(button.dataset.basemap === activeBasemap));
+  });
+}
 
 const atmosphere = new THREE.Mesh(
   new THREE.SphereGeometry(1.49, 96, 96),
@@ -665,6 +710,9 @@ elements.yearButtons.forEach((button) => {
   button.addEventListener("click", () => selectYear(button.dataset.year));
 });
 elements.yearSelect.addEventListener("change", () => selectYear(elements.yearSelect.value));
+elements.basemapButtons.forEach((button) => {
+  button.addEventListener("click", () => selectBasemap(button.dataset.basemap));
+});
 elements.autoplay.addEventListener("click", () => setAutoplay(!autoplayEnabled));
 elements.panelToggle.addEventListener("click", () => setPanelCollapsed(!isPanelCollapsed));
 elements.link.addEventListener("click", () => setAutoplay(false));

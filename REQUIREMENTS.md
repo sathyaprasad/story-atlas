@@ -21,12 +21,13 @@ Story Atlas is a dark, cinematic, map-based explorer for curated and award-winni
 - Page header uses text for the Story Atlas name; the supplied logo image is not shown in the page header.
 - App icon uses the repo-local `assets/story-atlas-logo.png` image supplied by the user.
 - Globe texture uses the repo-local `assets/world.jpg` image supplied by the user.
+- Alternate light globe basemap uses the repo-local `assets/world-light.jpeg` image supplied by the user.
 
 ### Acceptance Criteria
 - Browser title is `Story Atlas`.
 - `index.html` references `assets/story-atlas-logo.png` as favicon/app icon.
 - The visible header contains `ArcGIS StoryMaps` and `Story Atlas`.
-- No generated or remote replacement image is used for the globe texture.
+- No generated or remote replacement image is used for globe basemap textures.
 
 ## Data Contract
 - Story data lives in `stories.json`, grouped by year.
@@ -84,7 +85,8 @@ Story Atlas is a dark, cinematic, map-based explorer for curated and award-winni
 ## Globe Requirements
 - Use Three.js for the main map/globe.
 - Globe should feel abstract and cinematic, inspired by 2050.earth, while staying readable.
-- Globe uses a UV sphere with the local `assets/world.jpg` equirectangular texture.
+- Globe uses a UV sphere with local equirectangular basemap textures.
+- Users can switch between the default dark basemap and the light basemap.
 - Globe includes subtle graticule lines, atmosphere, stars, story pins, and one active story label.
 - Globe must not use generated green land patches, cyan dotted land clusters, filled land blobs, or noisy procedural speckles.
 - Selecting a story rotates the globe so the active pin is centered toward the camera.
@@ -98,6 +100,7 @@ Story Atlas is a dark, cinematic, map-based explorer for curated and award-winni
 - Changing years hides pins from other years.
 - Inactive pins do not pulse.
 - The active label remains limited to the selected story.
+- Basemap controls expose the active basemap state and switch the globe texture without a page reload.
 
 ## Year Selection Requirements
 - Year selector lives in the top-right header area.

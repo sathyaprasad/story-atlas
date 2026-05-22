@@ -233,6 +233,35 @@ h1 {
   display: none;
 }
 
+.basemap-switch {
+  display: inline-grid;
+  grid-template-columns: repeat(2, minmax(54px, 1fr));
+  gap: 4px;
+  padding: 5px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: rgba(6, 11, 18, 0.62);
+  backdrop-filter: blur(18px);
+  box-shadow: var(--shadow);
+}
+
+.basemap-switch button {
+  min-height: 32px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 850;
+  letter-spacing: 0;
+  cursor: pointer;
+}
+
+.basemap-switch button[aria-pressed="true"] {
+  background: rgba(243, 247, 255, 0.92);
+  color: #061019;
+}
+
 .status-pill {
   display: flex;
   align-items: baseline;
@@ -747,6 +776,16 @@ a:focus-visible {
     font-size: 1rem;
     font-weight: 900;
     appearance: none;
+  }
+
+  .basemap-switch {
+    grid-template-columns: repeat(2, 48px);
+    padding: 4px;
+  }
+
+  .basemap-switch button {
+    min-height: 30px;
+    font-size: 0.72rem;
   }
 
   .panel-title-row {
